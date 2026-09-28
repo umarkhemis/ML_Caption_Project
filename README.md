@@ -1,6 +1,6 @@
 # Predicting Telecom Customer Churn
 
-BCS 3101 Capstone - Ahmed Umar Khemis - Reg. No. [FILL IN]
+BCS 3101 Capstone - Ahmed Umar Khemis - Reg. No. 2024/A/KCS/3970/F
 
 Binary classification: will a telecom customer cancel their subscription?
 Dataset: Telco Customer Churn (IBM sample data), 7,043 customers, 21 columns.
