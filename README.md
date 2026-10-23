@@ -45,10 +45,17 @@ customers early enough to try to keep them.
 
 Notebooks assume they are opened from inside `notebooks/`.
 
-## Status
+## Updated workflow
 
-- [x] 01 data loading, pipeline, baseline
-- [ ] 02 four models with cross-validation
-- [ ] 03 tuning and comparison
-- [ ] 04 error and subgroup analysis
-- [ ] 05 save and reload best pipeline
+1. `01_data_pipeline_baseline.ipynb`: reusable data loading, summary statistics, duplicate and missing-value checks, target imbalance, training-set EDA, preprocessing explanation, and a majority-class baseline.
+2. `02_model_comparison.ipynb`: four model families evaluated using the same stratified cross-validation folds; PR-AUC (average precision) is reported alongside F1, ROC-AUC and accuracy. Class weighting is used where supported.
+3. `03_tuning_and_final_model.ipynb`: tunes Logistic Regression and Random Forest using PR-AUC, selects a threshold from out-of-fold training probabilities using F2, and evaluates on the held-out test set.
+4. `04_error_and_subgroup_analysis.ipynb`: evaluates errors and subgroup recall at the selected style of threshold and adds permutation importance and confident-error review.
+5. `05_save_and_reload_pipeline.ipynb`: saves and reloads the full pipeline together with its threshold, input schema, selected parameters, selection metric, random seed and scikit-learn version.
+
+Run notebooks from inside the `notebooks/` directory, in order. Model scores may change after these methodological improvements; use the newly executed notebook outputs rather than carrying forward old score claims. The assumed business costs of missed churners and retention offers are not provided, so F2 is used as a transparent provisional threshold-selection objective, not as a proven financial optimum.
+
+
+## Important before submission
+
+Re-run notebooks 01–05 from top to bottom after installing `requirements.txt`. This refreshes outputs and regenerates `models/final_pipeline.joblib` with the new threshold and metadata. Do not present the old saved model or old score figures as the results of the updated workflow until notebook 05 has been rerun.

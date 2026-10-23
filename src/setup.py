@@ -19,7 +19,7 @@ CATEGORY_COLUMNS = [
     "Contract", "PaperlessBilling", "PaymentMethod",
 ]
 
-SCORING = ["accuracy", "f1", "roc_auc"]
+SCORING = ["accuracy", "f1", "roc_auc", "average_precision"]
 
 
 def load_and_clean(path=DATA_PATH):
@@ -27,6 +27,8 @@ def load_and_clean(path=DATA_PATH):
     TotalCharges stored as text, and the target stored as Yes/No instead of 1/0."""
     df = pd.read_csv(path)
     df["TotalCharges"] = pd.to_numeric(df["TotalCharges"], errors="coerce")
+    # Blank TotalCharges occur for customers with tenure == 0; they have not accumulated charges.
+    df["TotalCharges"] = df["TotalCharges"].fillna(0)
     df = df.drop(columns=["customerID"])
     df["Churn"] = (df["Churn"] == "Yes").astype(int)
     return df
@@ -67,6 +69,7 @@ def evaluate(model, name, X_train, y_train, preprocessing, cv):
     row = {"model": name}
     for score_name in SCORING:
         scores = results["test_" + score_name]
-        row[score_name + " (mean)"] = round(scores.mean(), 3)
-        row[score_name + " (spread)"] = round(scores.std(), 3)
+        display_name = "PR-AUC (average precision)" if score_name == "average_precision" else score_name
+        row[display_name + " (mean)"] = round(scores.mean(), 3)
+        row[display_name + " (spread)"] = round(scores.std(), 3)
     return row
